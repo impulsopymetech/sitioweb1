@@ -1,0 +1,856 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1 class="sr-only">Impulso PyME Tech - Tecnología y Gestión Empresarial</h1>
+
+<!-- Page Navigation -->
+<input type="radio" name="page" id="page-home" checked class="page-radio">
+<input type="radio" name="page" id="page-portfolio" class="page-radio">
+
+<!-- Tab radios for Finanzas -->
+<input type="radio" name="fin-tabs" id="fin-tab1" checked class="tab-radio">
+<input type="radio" name="fin-tabs" id="fin-tab2" class="tab-radio">
+<input type="radio" name="fin-tabs" id="fin-tab3" class="tab-radio">
+
+<!-- Tab radios for RRHH -->
+<input type="radio" name="rrhh-tabs" id="rrhh-tab1" checked class="tab-radio">
+<input type="radio" name="rrhh-tabs" id="rrhh-tab2" class="tab-radio">
+<input type="radio" name="rrhh-tabs" id="rrhh-tab3" class="tab-radio">
+<input type="radio" name="rrhh-tabs" id="rrhh-tab4" class="tab-radio">
+
+<!-- Tab radios for Ventas -->
+<input type="radio" name="ventas-tabs" id="ventas-tab1" checked class="tab-radio">
+<input type="radio" name="ventas-tabs" id="ventas-tab2" class="tab-radio">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #F5F7FA;
+    color: #1A1A2E;
+    line-height: 1.6;
+  }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+  .page-radio, .tab-radio { display: none; }
+
+  /* Page switching */
+  .page-home, .page-portfolio { display: none; }
+  #page-home:checked ~ .page-home { display: block; }
+  #page-portfolio:checked ~ .page-portfolio { display: block; }
+  #page-home:checked ~ header .nav-home { color: #E63A1E; }
+  #page-portfolio:checked ~ header .nav-portfolio { color: #E63A1E; }
+
+  /* Header */
+  header {
+    background: #1A3F8F;
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .logo .rocket { font-size: 24px; }
+  .logo .tech { color: #E63A1E; }
+  nav { display: flex; gap: 24px; align-items: center; }
+  nav a {
+    color: rgba(255,255,255,0.85);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s ease;
+    text-decoration: none;
+  }
+  nav a:hover { color: #E63A1E; }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1A3F8F 0%, #1A5CCC 100%);
+    padding: 64px 32px 48px;
+    text-align: center;
+    color: #fff;
+  }
+  .hero h2 {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .hero h2 span { color: #E63A1E; }
+  .hero p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.85);
+    max-width: 650px;
+    margin: 0 auto 32px;
+  }
+  .btn-primary {
+    display: inline-block;
+    background: #E63A1E;
+    color: #fff;
+    padding: 14px 32px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .btn-primary:hover { background: #c42f17; transform: translateY(-2px); }
+
+  /* Photo Collage - 6 images */
+  .photo-collage {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 140px 140px;
+    gap: 10px;
+    max-width: 900px;
+    margin: 44px auto 0;
+  }
+  .photo-cell {
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  .photo-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  .photo-cell:hover img { transform: scale(1.06); }
+  .photo-cell .photo-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 6px 10px;
+    background: linear-gradient(transparent, rgba(13,45,107,0.9));
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Sections */
+  .section-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1A3F8F;
+    margin-bottom: 8px;
+  }
+  .section-subtitle {
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 40px;
+  }
+
+  /* Problems */
+  .problems {
+    padding: 64px 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .problems-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+  .problem-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 24px 16px;
+    text-align: center;
+  }
+  .problem-card .icon { font-size: 28px; margin-bottom: 12px; }
+  .problem-card p { font-size: 13px; color: #555; }
+
+  /* Services */
+  .services {
+    padding: 64px 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+    scroll-margin-top: 70px;
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+  .service-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 32px 24px;
+    text-align: left;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .service-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .service-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(26,92,204,0.08);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-size: 22px;
+  }
+  .service-card h3 { font-size: 16px; font-weight: 600; color: #1A3F8F; margin-bottom: 8px; }
+  .service-card p { font-size: 13px; color: #666; line-height: 1.5; }
+  .service-card .tools { font-size: 11px; color: #999; margin-top: 8px; font-style: italic; }
+
+  /* Plans */
+  .plans {
+    padding: 64px 32px;
+    background: #fff;
+    text-align: center;
+    scroll-margin-top: 70px;
+  }
+  .plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .plan-card {
+    border: 2px solid #eee;
+    border-radius: 12px;
+    padding: 32px 24px;
+    position: relative;
+    transition: border-color 0.2s ease;
+  }
+  .plan-card:hover { border-color: #1A5CCC; }
+  .plan-card.featured { border-color: #E63A1E; }
+  .plan-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #E63A1E;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 12px;
+  }
+  .plan-card h3 { font-size: 18px; font-weight: 700; color: #1A3F8F; margin-bottom: 8px; }
+  .plan-card .price { font-size: 24px; font-weight: 700; color: #1A1A2E; margin-bottom: 4px; font-family: monospace; }
+  .plan-card .price-note { font-size: 12px; color: #888; margin-bottom: 16px; }
+  .plan-card ul { list-style: none; text-align: left; margin-bottom: 24px; }
+  .plan-card ul li { font-size: 13px; color: #555; padding: 6px 0; border-bottom: 1px solid #f5f5f5; }
+  .plan-card ul li::before { content: "✓ "; color: #1A5CCC; font-weight: 700; }
+  .btn-plan {
+    display: inline-block;
+    background: #1A5CCC;
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .btn-plan:hover { background: #1A3F8F; }
+
+  /* Differentiators */
+  .differentiators {
+    padding: 64px 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .diff-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    text-align: left;
+  }
+  .diff-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #eee;
+  }
+  .diff-item .check { color: #1A5CCC; font-size: 18px; font-weight: 700; flex-shrink: 0; }
+  .diff-item p { font-size: 14px; color: #444; }
+
+  /* Process */
+  .process {
+    padding: 64px 32px;
+    background: linear-gradient(135deg, #1A3F8F 0%, #1A5CCC 100%);
+    text-align: center;
+    color: #fff;
+  }
+  .process .section-title { color: #fff; }
+  .process .section-subtitle { color: rgba(255,255,255,0.7); }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .step { padding: 24px 16px; }
+  .step-number {
+    width: 40px;
+    height: 40px;
+    background: #E63A1E;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 auto 12px;
+  }
+  .step h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .step p { font-size: 12px; color: rgba(255,255,255,0.75); }
+
+  /* Contact */
+  .contact {
+    padding: 64px 32px;
+    background: #fff;
+    text-align: center;
+    scroll-margin-top: 70px;
+  }
+  .contact-form {
+    max-width: 500px;
+    margin: 32px auto 0;
+    text-align: left;
+  }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 500; color: #555; margin-bottom: 6px; }
+  .form-group input, .form-group textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.15s ease;
+    outline: none;
+  }
+  .form-group input:focus, .form-group textarea:focus { border-color: #1A5CCC; }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .btn-submit {
+    width: 100%;
+    background: #E63A1E;
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .btn-submit:hover { background: #c42f17; }
+  .contact-info {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .contact-info-item { font-size: 13px; color: #555; display: flex; align-items: center; gap: 6px; }
+
+  /* Footer */
+  footer {
+    background: #0D2D6B;
+    padding: 32px;
+    text-align: center;
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+  }
+  .social-links { display: flex; justify-content: center; gap: 16px; margin-bottom: 16px; }
+  .social-links a {
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .social-links a:hover { background: #E63A1E; }
+  .social-links svg { width: 16px; height: 16px; fill: #fff; }
+
+  /* WhatsApp */
+  .whatsapp-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 56px;
+    height: 56px;
+    background: #25d366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(37,211,102,0.4);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    z-index: 99;
+    text-decoration: none;
+  }
+  .whatsapp-btn:hover { transform: scale(1.1); }
+  .whatsapp-btn svg { width: 28px; height: 28px; fill: #fff; }
+
+  /* ===== PORTFOLIO PAGE ===== */
+  .portfolio-hero {
+    background: linear-gradient(135deg, #1A3F8F 0%, #1A5CCC 100%);
+    padding: 48px 32px;
+    text-align: center;
+    color: #fff;
+    scroll-margin-top: 70px;
+  }
+  .portfolio-hero h2 { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+  .portfolio-hero p { font-size: 16px; color: rgba(255,255,255,0.8); max-width: 600px; margin: 0 auto; }
+
+  .portfolio-section {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 48px 32px;
+  }
+  .portfolio-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 32px;
+    transition: box-shadow 0.2s ease;
+  }
+  .portfolio-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .portfolio-card-header {
+    padding: 24px 24px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .portfolio-card-header h3 { font-size: 20px; font-weight: 700; color: #1A3F8F; }
+  .portfolio-card-header .tag {
+    background: #E63A1E;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .portfolio-card-desc {
+    padding: 8px 24px 16px;
+    font-size: 13px;
+    color: #666;
+  }
+
+  /* Tab System */
+  .tab-nav {
+    display: flex;
+    gap: 0;
+    padding: 0 24px;
+    border-bottom: 2px solid #eee;
+  }
+  .tab-nav label {
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #888;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .tab-nav label:hover { color: #1A5CCC; }
+
+  .tab-content {
+    display: none;
+    padding: 16px 24px 24px;
+  }
+  .tab-content img {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #eee;
+  }
+
+  /* Finanzas tabs */
+  #fin-tab1:checked ~ .page-portfolio .fin-content-1 { display: block; }
+  #fin-tab2:checked ~ .page-portfolio .fin-content-2 { display: block; }
+  #fin-tab3:checked ~ .page-portfolio .fin-content-3 { display: block; }
+  #fin-tab1:checked ~ .page-portfolio .fin-label-1 { color: #1A5CCC; border-bottom-color: #1A5CCC; }
+  #fin-tab2:checked ~ .page-portfolio .fin-label-2 { color: #1A5CCC; border-bottom-color: #1A5CCC; }
+  #fin-tab3:checked ~ .page-portfolio .fin-label-3 { color: #1A5CCC; border-bottom-color: #1A5CCC; }
+
+  /* RRHH tabs */
+  #rrhh-tab1:checked ~ .page-portfolio .rrhh-content-1 { display: block; }
+  #rrhh-tab2:checked ~ .page-portfolio .rrhh-content-2 { display: block; }
+  #rrhh-tab3:checked ~ .page-portfolio .rrhh-content-3 { display: block; }
+  #rrhh-tab4:checked ~ .page-portfolio .rrhh-content-4 { display: block; }
+  #rrhh-tab1:checked ~ .page-portfolio .rrhh-label-1 { color: #1A5CCC; border-bottom-color: #1A5CCC; }
+  #rrhh-tab2:checked ~ .page-portfolio .rrhh-label-2 { color: #1A5CCC; border-bottom-color: #1A5CCC; }
+  #rrhh-tab3:checked ~ .page-portfolio .rrhh-label-3 { color: #1A5CCC; border-bottom-color: #1A5CCC; }
+  #rrhh-tab4:checked ~ .page-portfolio .rrhh-label-4 { color: #1A5CCC; border-bottom-color: #1A5CCC; }
+
+  /* Ventas tabs */
+  #ventas-tab1:checked ~ .page-portfolio .ventas-content-1 { display: block; }
+  #ventas-tab2:checked ~ .page-portfolio .ventas-content-2 { display: block; }
+  #ventas-tab1:checked ~ .page-portfolio .ventas-label-1 { color: #1A5CCC; border-bottom-color: #1A5CCC; }
+  #ventas-tab2:checked ~ .page-portfolio .ventas-label-2 { color: #1A5CCC; border-bottom-color: #1A5CCC; }
+
+  .portfolio-metrics {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 0 24px 20px;
+  }
+  .metric {
+    background: #F5F7FA;
+    border-radius: 8px;
+    padding: 8px 12px;
+    text-align: center;
+  }
+  .metric .value { font-size: 16px; font-weight: 700; color: #1A3F8F; font-family: monospace; }
+  .metric .label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.03em; }
+
+  .portfolio-back {
+    text-align: center;
+    padding: 0 32px 48px;
+  }
+  .btn-back {
+    display: inline-block;
+    background: #1A5CCC;
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    text-decoration: none;
+  }
+  .btn-back:hover { background: #1A3F8F; }
+
+  /* Animations */
+  .fade-in { opacity: 1; }
+  @media (prefers-reduced-motion: no-preference) {
+    .fade-in { animation: fadeIn 0.5s ease-out both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    .delay-6 { animation-delay: 0.6s; }
+  }
+
+  @media (max-width: 768px) {
+    .hero h2 { font-size: 28px; }
+    .hero p { font-size: 15px; }
+    nav { gap: 12px; }
+    nav a { font-size: 12px; }
+    .photo-collage { grid-template-columns: 1fr 1fr; grid-template-rows: 110px 110px 110px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .plans-grid { grid-template-columns: 1fr; }
+    .tab-nav { flex-wrap: wrap; }
+    .tab-nav label { padding: 8px 10px; font-size: 11px; }
+    .contact-info { flex-direction: column; align-items: center; }
+  }
+</style>
+
+<!-- Header -->
+<header>
+  <div class="logo">
+    <span class="rocket">🚀</span> Impulso PyME <span class="tech">Tech</span>
+  </div>
+  <nav>
+    <a href="#inicio" onclick="document.getElementById('page-home').checked=true;" class="nav-home">Inicio</a>
+    <a href="#portfolio-top" onclick="document.getElementById('page-portfolio').checked=true;" class="nav-portfolio">Portfolio</a>
+    <a href="#servicios" onclick="document.getElementById('page-home').checked=true;">Servicios</a>
+    <a href="#planes" onclick="document.getElementById('page-home').checked=true;">Planes</a>
+    <a href="#contacto" onclick="document.getElementById('page-home').checked=true;">Contacto</a>
+  </nav>
+</header>
+
+<!-- ==================== HOME PAGE ==================== -->
+<div class="page-home">
+
+  <section class="hero" id="inicio">
+    <h2 class="fade-in">Tecnología y gestión empresarial<br><span>para tu PyME</span></h2>
+    <p class="fade-in delay-1">Ayudamos a pequeñas y medianas empresas a tomar mejores decisiones, ahorrar tiempo y potenciar su crecimiento con soluciones digitales simples y adaptadas a su realidad.</p>
+    <a href="#contacto" class="btn-primary fade-in delay-2">Agendá tu diagnóstico gratuito</a>
+
+    <!-- Photo Collage - 6 imágenes propias -->
+    <div class="photo-collage fade-in delay-3">
+      <div class="photo-cell">
+        <img src="imagenes/equipo_y_estrategia.png" alt="Equipo y Estrategia">
+        <div class="photo-label">Equipo y Estrategia</div>
+      </div>
+      <div class="photo-cell">
+        <img src="imagenes/bi.png" alt="Business Intelligence">
+        <div class="photo-label">Business Intelligence</div>
+      </div>
+      <div class="photo-cell">
+        <img src="imagenes/automatizacion.png" alt="Automatización">
+        <div class="photo-label">Automatización</div>
+      </div>
+      <div class="photo-cell">
+        <img src="imagenes/ia_aplicada_empresa.png" alt="IA Aplicada a la Empresa">
+        <div class="photo-label">IA Aplicada</div>
+      </div>
+      <div class="photo-cell">
+        <img src="imagenes/desarrollo_web.png" alt="Desarrollo Web">
+        <div class="photo-label">Desarrollo Web</div>
+      </div>
+      <div class="photo-cell">
+        <img src="imagenes/erp.png" alt="ERP">
+        <div class="photo-label">ERP</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="problems">
+    <h2 class="section-title">¿Te sentís identificado?</h2>
+    <p class="section-subtitle">Estos son los problemas más comunes que resolvemos en PyMEs</p>
+    <div class="problems-grid">
+      <div class="problem-card fade-in delay-1"><div class="icon">📉</div><p>No tenés visibilidad de los indicadores clave de tu negocio</p></div>
+      <div class="problem-card fade-in delay-2"><div class="icon">🤯</div><p>Tomás decisiones sin datos concretos</p></div>
+      <div class="problem-card fade-in delay-3"><div class="icon">⏰</div><p>Procesos manuales que consumen tiempo y generan errores</p></div>
+      <div class="problem-card fade-in delay-4"><div class="icon">🔌</div><p>Dificultad para implementar tecnología</p></div>
+      <div class="problem-card fade-in delay-5"><div class="icon">🧩</div><p>Sistemas fragmentados y sin presencia web</p></div>
+    </div>
+  </section>
+
+  <section class="services" id="servicios">
+    <h2 class="section-title">Nuestros Servicios</h2>
+    <p class="section-subtitle">Soluciones integrales para digitalizar y potenciar tu empresa</p>
+    <div class="services-grid">
+      <div class="service-card fade-in delay-1"><div class="service-icon">📊</div><h3>Business Intelligence</h3><p>Tableros personalizados para visualizar tus datos en tiempo real y tomar decisiones informadas.</p><div class="tools">Power BI · Google Looker Studio</div></div>
+      <div class="service-card fade-in delay-2"><div class="service-icon">⚙️</div><h3>Automatización de Procesos</h3><p>Conectá herramientas y simplificá tareas repetitivas. Ahorrá tiempo y reducí errores operativos.</p><div class="tools">n8n · Power Automate · Zapier · Control-M</div></div>
+      <div class="service-card fade-in delay-3"><div class="service-icon">🤖</div><h3>Inteligencia Artificial Aplicada</h3><p>Chatbots para atención al cliente, asistentes virtuales y agentes inteligentes.</p><div class="tools">Chatbots · Asistentes · Agentes IA</div></div>
+      <div class="service-card fade-in delay-4"><div class="service-icon">🏢</div><h3>Implementación de ERPs</h3><p>Unificá ventas, compras, stock y finanzas en una sola plataforma.</p><div class="tools">Odoo · Totvs Protheus · Open Source</div></div>
+      <div class="service-card fade-in delay-5"><div class="service-icon">🌐</div><h3>Desarrollo de Sitios Web</h3><p>Páginas institucionales, tiendas online y landing pages con foco en conversión.</p><div class="tools">E-commerce · Landing Pages · Institucional</div></div>
+      <div class="service-card fade-in delay-6"><div class="service-icon">👥</div><h3>Recursos Humanos</h3><p>Selección, reclutamiento, capacitación y liquidación de sueldos.</p><div class="tools">Reclutamiento · Capacitación · Nómina</div></div>
+    </div>
+  </section>
+
+  <section class="plans" id="planes">
+    <h2 class="section-title">Planes y Precios</h2>
+    <p class="section-subtitle">Opciones pensadas para la realidad de tu PyME</p>
+    <div class="plans-grid">
+      <div class="plan-card fade-in delay-1"><h3>Plan Inicial</h3><div class="price">ARS $800.000</div><div class="price-note">Pago único</div><ul><li>1 dashboard personalizado</li><li>1 automatización básica</li><li>Capacitación inicial</li><li>Ideal para empezar a ordenar datos</li></ul><span class="btn-plan">Consultar</span></div>
+      <div class="plan-card featured fade-in delay-2"><div class="plan-badge">⭐ Más elegido</div><h3>Plan PyME en Crecimiento</h3><div class="price">ARS $600.000</div><div class="price-note">Por mes</div><ul><li>Hasta 3 dashboards</li><li>Automatizaciones múltiples</li><li>Soporte mensual (4 hs/mes)</li><li>BI + Automatización integrada</li></ul><span class="btn-plan">Consultar</span></div>
+      <div class="plan-card fade-in delay-3"><h3>Plan a Medida</h3><div class="price">A consultar</div><div class="price-note">Evaluación personalizada</div><ul><li>IA, ERP, Web, RRHH</li><li>Procesos complejos</li><li>Cotización según alcance</li><li>Sin compromiso</li></ul><span class="btn-plan">Consultar</span></div>
+    </div>
+  </section>
+
+  <section class="differentiators">
+    <h2 class="section-title">¿Por qué elegirnos?</h2>
+    <p class="section-subtitle">Lo que nos diferencia de otras consultoras</p>
+    <div class="diff-grid">
+      <div class="diff-item fade-in delay-1"><span class="check">✔</span><p><strong>Atención 100% personalizada</strong> — Sin guiones ni respuestas automáticas</p></div>
+      <div class="diff-item fade-in delay-2"><span class="check">✔</span><p><strong>Precios pensados para PyMEs</strong> — Accesibles y transparentes</p></div>
+      <div class="diff-item fade-in delay-3"><span class="check">✔</span><p><strong>Implementación rápida</strong> — En días, no en meses</p></div>
+      <div class="diff-item fade-in delay-4"><span class="check">✔</span><p><strong>Soluciones sin código</strong> — Accesibles para todos los equipos</p></div>
+      <div class="diff-item fade-in delay-5"><span class="check">✔</span><p><strong>Resultados medibles</strong> — Foco en mejora continua</p></div>
+      <div class="diff-item fade-in delay-6"><span class="check">✔</span><p><strong>Visión integral</strong> — Tecnología + Talento Humano</p></div>
+    </div>
+  </section>
+
+  <section class="process">
+    <h2 class="section-title">¿Cómo trabajamos?</h2>
+    <p class="section-subtitle">4 pasos simples para transformar tu negocio</p>
+    <div class="process-steps">
+      <div class="step fade-in delay-1"><div class="step-number">1</div><h4>Diagnóstico gratuito</h4><p>Agendá una reunión sin compromiso</p></div>
+      <div class="step fade-in delay-2"><div class="step-number">2</div><h4>Relevamiento</h4><p>Analizamos tus necesidades</p></div>
+      <div class="step fade-in delay-3"><div class="step-number">3</div><h4>Implementación</h4><p>Ejecutamos en pocos días</p></div>
+      <div class="step fade-in delay-4"><div class="step-number">4</div><h4>Acompañamiento</h4><p>Evolucionamos junto a tu negocio</p></div>
+    </div>
+  </section>
+
+  <section class="contact" id="contacto">
+    <h2 class="section-title">Contactanos</h2>
+    <p class="section-subtitle">¿Listo para dar el próximo paso? Escribinos</p>
+    <div class="contact-form">
+      <div class="form-group"><label for="name">Nombre completo</label><input type="text" id="name" placeholder="Tu nombre"></div>
+      <div class="form-group"><label for="email">Email</label><input type="email" id="email" placeholder="tu@email.com"></div>
+      <div class="form-group"><label for="phone">Teléfono</label><input type="tel" id="phone" placeholder="+54 351 1234-5678"></div>
+      <div class="form-group"><label for="msg">Mensaje</label><textarea id="msg" placeholder="Contanos sobre tu proyecto o necesidad..."></textarea></div>
+      <button class="btn-submit">Enviar Mensaje</button>
+    </div>
+    <div class="contact-info">
+      <div class="contact-info-item">📧 impulsopymetech@gmail.com</div>
+      <div class="contact-info-item">📱 +54 351 7560909</div>
+      <div class="contact-info-item">👤 Walter Sosa - Fundador</div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ==================== PORTFOLIO PAGE ==================== -->
+<div class="page-portfolio">
+
+  <section class="portfolio-hero" id="portfolio-top">
+    <h2>📊 Nuestro Portfolio</h2>
+    <p>Ejemplos reales de dashboards desarrollados en Power BI para nuestros clientes</p>
+  </section>
+
+  <div class="portfolio-section">
+
+    <!-- ===== PRODUCCIÓN (1 hoja) ===== -->
+    <div class="portfolio-card fade-in delay-1">
+      <div class="portfolio-card-header">
+        <h3>🏭 Producción y Stock</h3>
+        <span class="tag">Producción</span>
+      </div>
+      <div class="portfolio-card-desc">Control integral de producción por turno con seguimiento de cumplimiento y gestión de inventario con alertas de stock crítico.</div>
+      <div class="portfolio-metrics">
+        <div class="metric"><div class="value">59K</div><div class="label">Unidades</div></div>
+        <div class="metric"><div class="value">99%</div><div class="label">Cumplimiento</div></div>
+        <div class="metric"><div class="value">$65.9M</div><div class="label">Valor Stock</div></div>
+      </div>
+      <div style="padding: 0 24px 24px;">
+        <img src="imagenes/produccion.png" alt="Dashboard Producción" style="width:100%; border-radius:8px; border:1px solid #eee;">
+      </div>
+    </div>
+
+    <!-- ===== FINANZAS (3 hojas) ===== -->
+    <div class="portfolio-card fade-in delay-2">
+      <div class="portfolio-card-header">
+        <h3>💰 Tablero Ejecutivo Financiero</h3>
+        <span class="tag">Finanzas</span>
+      </div>
+      <div class="portfolio-card-desc">Visión 360° de ingresos, egresos, EBITDA y flujo de caja. Seguimiento de cuentas por cobrar y pagar con aging detallado.</div>
+      <div class="portfolio-metrics">
+        <div class="metric"><div class="value">$9.7M</div><div class="label">Ingresos</div></div>
+        <div class="metric"><div class="value">$2.5M</div><div class="label">EBITDA</div></div>
+        <div class="metric"><div class="value">40%</div><div class="label">Margen Bruto</div></div>
+      </div>
+      <div class="tab-nav">
+        <label for="fin-tab1" class="fin-label-1">General</label>
+        <label for="fin-tab2" class="fin-label-2">Rentabilidad</label>
+        <label for="fin-tab3" class="fin-label-3">Cuentas</label>
+      </div>
+      <div class="tab-content fin-content-1">
+        <img src="imagenes/finanzas-general.png" alt="Finanzas - General">
+      </div>
+      <div class="tab-content fin-content-2">
+        <img src="imagenes/finanzas-rentabilidad.png" alt="Finanzas - Rentabilidad">
+      </div>
+      <div class="tab-content fin-content-3">
+        <img src="imagenes/finanzas-cuentas.png" alt="Finanzas - Cuentas">
+      </div>
+    </div>
+
+    <!-- ===== RRHH (4 hojas) ===== -->
+    <div class="portfolio-card fade-in delay-3">
+      <div class="portfolio-card-header">
+        <h3>👥 Dashboard de Recursos Humanos</h3>
+        <span class="tag">RRHH</span>
+      </div>
+      <div class="portfolio-card-desc">Gestión completa de dotación, ausentismo, horas extras, accidentes laborales y planificación de vacaciones.</div>
+      <div class="portfolio-metrics">
+        <div class="metric"><div class="value">685</div><div class="label">Headcount</div></div>
+        <div class="metric"><div class="value">0.02%</div><div class="label">Ausentismo</div></div>
+        <div class="metric"><div class="value">$5.7M</div><div class="label">Costo HE</div></div>
+      </div>
+      <div class="tab-nav">
+        <label for="rrhh-tab1" class="rrhh-label-1">Empleados</label>
+        <label for="rrhh-tab2" class="rrhh-label-2">Ausentismo</label>
+        <label for="rrhh-tab3" class="rrhh-label-3">Hs Extras</label>
+        <label for="rrhh-tab4" class="rrhh-label-4">Vacaciones</label>
+      </div>
+      <div class="tab-content rrhh-content-1">
+        <img src="imagenes/rrhh-empleados.png" alt="RRHH - Empleados">
+      </div>
+      <div class="tab-content rrhh-content-2">
+        <img src="imagenes/rrhh-ausentismo.png" alt="RRHH - Ausentismo">
+      </div>
+      <div class="tab-content rrhh-content-3">
+        <img src="imagenes/rrhh-hsextras.png" alt="RRHH - Horas Extras">
+      </div>
+      <div class="tab-content rrhh-content-4">
+        <img src="imagenes/rrhh-vacaciones.png" alt="RRHH - Vacaciones">
+      </div>
+    </div>
+
+    <!-- ===== VENTAS (2 hojas) ===== -->
+    <div class="portfolio-card fade-in delay-4">
+      <div class="portfolio-card-header">
+        <h3>🛒 Dashboard de Ventas Empresarial</h3>
+        <span class="tag">Ventas</span>
+      </div>
+      <div class="portfolio-card-desc">Análisis de eficiencia productiva con seguimiento de ventas por producto, cliente, región y período.</div>
+      <div class="portfolio-metrics">
+        <div class="metric"><div class="value">$115K</div><div class="label">Ventas/Mes</div></div>
+        <div class="metric"><div class="value">547</div><div class="label">Unidades</div></div>
+        <div class="metric"><div class="value">$788K</div><div class="label">Total ARS</div></div>
+      </div>
+      <div class="tab-nav">
+        <label for="ventas-tab1" class="ventas-label-1">Indicadores</label>
+        <label for="ventas-tab2" class="ventas-label-2">Detalle Ventas</label>
+      </div>
+      <div class="tab-content ventas-content-1">
+        <img src="imagenes/ventas-indicadores.png" alt="Ventas - Indicadores">
+      </div>
+      <div class="tab-content ventas-content-2">
+        <img src="imagenes/ventas-detalle.png" alt="Ventas - Detalle">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="portfolio-back">
+    <a href="#inicio" onclick="document.getElementById('page-home').checked=true;" class="btn-back">← Volver al Inicio</a>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="social-links">
+    <a href="https://www.linkedin.com/company/impulso-pyme-tech" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+    </a>
+    <a href="https://www.instagram.com/impulso_pyme_tech" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
+    </a>
+  </div>
+  <p>© 2026 Impulso PyME Tech. Todos los derechos reservados. | Córdoba, Argentina</p>
+</footer>
+
+<!-- WhatsApp -->
+<a href="https://wa.me/5493517560909" target="_blank" rel="noopener" class="whatsapp-btn">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+</a>
+
+</body>
+</html>
